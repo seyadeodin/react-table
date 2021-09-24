@@ -68,14 +68,29 @@ function App() {
       setData(result.data);
     })();
   }, []);
+  
+  
+  const [searchInput, setSearchInput ] = useState('');
+  useEffect(() => {
+    (async () => {
+      const result = await axios(`https://api.tvmaze.com/search/shows?q=${searchInput}`);
+      setData(result.data)
+    })();
+  }, [searchInput]);
 
-
-
+  const handleSearchChange = e => {
+    const value = e.target.value || undefined;
+    setSearchInput(value);
+  }
+  
 
   return(
     <div className="App">
-      <Table columns={columns} data={data} />
-    </div>
+      <Table columns={columns} data={data} setSearchInput={setSearchInput} 
+        searchInput={searchInput}   
+        handleSearchChange={handleSearchChange}
+      />
+     </div>
   );
 }
 

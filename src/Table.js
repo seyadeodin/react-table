@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import { useTable, useFilters, useColumnOrder, useSortBy} from "react-table";
 import axios from 'axios';
 
-export default function Table({ columns, data }) {
+export default function Table({ columns, data, searchInput, handleSearchChange }) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -21,7 +21,6 @@ export default function Table({ columns, data }) {
   );
 
   const [filterInput, setFilterInput] = useState('');
-  const [searchInput, setSearchInput ] = useState('');
 
   const handleFilterChange = e => {
     const value = e.target.value || undefined;
@@ -30,22 +29,11 @@ export default function Table({ columns, data }) {
   }
 
 
-  const handleSearchChange = e => {
-    const value = e.target.value || undefined;
-    setFilter("show.name", value);
-    setFilterInput(value);
-  }
-  
   const changeOrder = () => {
     setColumnOrder(['show.type','show.name', 'show.language', 'show.genres', 'show.runtime', 'show.status'])
   }
 
-  useEffect(() => {
-    (async () => {
-      const result = await axios(`https://api.tvmaze.com/search/shows?q=${filterInput}`);
-      data = result.data;
-    })();
-  }, [searchInput]);
+
 
 
   return (
